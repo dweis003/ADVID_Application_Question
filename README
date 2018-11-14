@@ -1,0 +1,89 @@
+DONALD WEISS 2018
+--------------------------------------------------------------------------------
+2. Select the appropriate database system, programming/scripting languages, 
+and data report formats to implement this system. Provide a brief explanation 
+for each choice and save it in a document format of your choice.
+
+-For my programming language I chose Python as I believed it would be the easiest
+langauage to set up and run a database in without having to install a variety 
+of libraries and other applications. For my database I chose to use SQLite as 
+it is a built in library of Python. 
+
+
+--------------------------------------------------------------------------------
+3. Create 3 to 10 records of test data to provide a good representation of the ID 
+and timestamp ranges. Your data does not need to provide full test coverage but 
+they should include the following: 
+(a) 3 records with an ID that start with the character ‘A’ and a timestamp on 
+November 6, 2018. 
+
+(b) At least 2 records have different dates 
+(c) At least one address is in Norco, CA
+Save the test records in a text file using a format of your choice. 
+
+-I chose to store my records in CSV files as they are easy to use in 
+a variety of programs and applications and the files themselves can be easily 
+viewed with only a text editor. 
+
+Also, provide a brief description of the coverage provided by each test record.
+-MY RECORDS ARE:
+ABC123,John Cena,9098845789,"411 info lane Riverside CA, 92501, USA",2018-11-06 22:11:24
+ABB124,Mike Trout,9513214567,"4978 Main Sreet Norco CA, 82401, USA",2018-11-06 19:07:50
+ABD125,Lady Gaga,7418906600,"711 Sing Ave Malibu CA, 90210, USA",2018-04-09 19:17:43
+CBA321,Don Weiss,9092373999,"7 Candy Lane San Bernardino CA, 92404, USA",2018-11-05 01:11:24
+BBB845,George Washington,1011841886,"1786 Const Road Colton CA, 93501, USA",2018-11-06 22:10:24
+
+For my test I created 5 records. Records 1, 2 and 3 are my records that have IDs
+that start with 'A'. They also have different phone numbers, addresses and 
+timestamp. However as required two of them are on Novemeber 11, 2018. My final 
+two records ID both don't start with 'A' and like the prior 3 have different
+names, phone numbers and addresses however record 5 does have Novemeber 6, 2018
+as its timestamp. I feel my 5 records provide for adequate testing and for example
+I also made use of a city whose name consists of more than one word "San Bernardino"
+and if you look at my CITY table I chose cities with similar names as to try to confuse
+my solution to question 5 I.E. in my records there is the city Norco and in
+my CITY table the cities Norco and Norton exist. 
+
+--------------------------------------------------------------------------------
+4A. Use a programming language you selected for Question 2, write a function or 
+class to generate a two-column table that shows the record count of the IDs that
+start with the character ‘A’ in each of the 24 hours in an arbitrary day. This 
+table will have 24 rows of data. The first column of the table is the hour number 
+in a 24-hour clock and the second column of the table is the number of records 
+with a timestamp within the corresponding hour.
+
+SQL SOLUTION:
+
+SELECT strftime('%H',Time_Stamp) as "Hour",  count(strftime('H',Time_Stamp)) 
+FROM RECORDS 
+Where ID LIKE 'A%'
+Group By Hour
+ORDER BY Hour ASC;
+
+NOTE: My solution assumes that given enough records that all 24 hours of the 
+day will be represented. However, if the records are small all 24 might not be.
+
+4B.Using this function or class to generate a table for November 6, 2018 using 
+the data you selected for Question 3. Select an output format that is appropriate 
+for on-screen display.
+
+SQL SOLUTION:
+
+SELECT * FROM RECORDS
+WHERE strftime('%Y %m %d',Time_Stamp) = '2018 11 06';
+
+--------------------------------------------------------------------------------
+5. Use a programming language you selected for Question 2, write a function to 
+identify the city within an address. Assume that all addresses have a valid city 
+name and your system has unlimited access to a database with all the valid city 
+names. Create a list of unique cities from the data you selected for Question 3. 
+Arrange the cities in alphabetical order.
+
+SQL SOLUTION:
+
+Select C.City_Name FROM CITIES C
+WHERE  EXISTS
+(SELECT * FROM RECORDS WHERE Address LIKE '%' || C.City_Name || '%')
+GROUP BY C.City_Name ORDER By C.City_Name ASC;
+
+
